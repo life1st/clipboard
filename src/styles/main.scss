@@ -1,0 +1,283 @@
+// =============================================================================
+// 全局变量和配置
+// =============================================================================
+
+
+// =============================================================================
+
+// 主要颜色
+$primary-color: #667eea;        // 蓝色
+$secondary-color: #764ba2;      // 紫色
+
+
+
+
+
+
+
+
+$bg-primary: transparent;
+$bg-secondary: rgba(255, 255, 255, 0.05);   // 轻微的背景色
+$bg-dark: rgba(0, 0, 0, 0.1);               // 轻微深色背景
+$bg-light: rgba(255, 255, 255, 0.02);       // 极轻微浅色背景
+
+
+$border-primary: rgba(0, 0, 0, 0.1);        // 深色边框
+$border-secondary: rgba(0, 0, 0, 0.05);     // 浅色边框
+$border-light: rgba(0, 0, 0, 0.02);         // 极浅边框
+
+
+$text-primary: #333333;                     // 深色文字
+$text-secondary: #666666;                   // 中等灰色文字
+$text-muted: #999999;                       // 浅灰色文字
+$text-light: #cccccc;                       // 极浅灰色文字
+
+
+$spacing-xs: 0.125rem;  // 2px (原来是 4px)
+$spacing-sm: 0.375rem;  // 6px (原来是 8px)
+$spacing-md: 0.75rem;   // 12px (原来是 16px)
+$spacing-lg: 1rem;      // 16px (原来是 24px)
+$spacing-xl: 1.5rem;    // 24px (原来是 32px)
+$spacing-xxl: 2rem;     // 32px (原来是 48px)
+
+
+$border-radius-sm: 0.25rem;   // 4px (原来是 6px)
+$border-radius-md: 0.375rem;  // 6px (原来是 8px)
+$border-radius-lg: 0.5rem;    // 8px (原来是 12px)
+$border-radius-xl: 0.75rem;   // 12px (原来是 16px)
+
+// 阴影
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+// 断点系统 (移动优先)
+$breakpoints: (
+  xs: 0,      // 移动设备
+  sm: 576px,  // 小屏幕
+  md: 768px,  // 中等屏幕
+  lg: 992px,  // 大屏幕
+  xl: 1200px, // 超大屏幕
+  xxl: 1400px // 超超大屏幕
+);
+
+
+$font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+$font-family-mono: 'Courier New', Courier, monospace;
+$font-size-base: 0.875rem;    // 14px (原来是 16px)
+$font-size-sm: 0.75rem;       // 12px (原来是 14px)
+$font-size-lg: 1rem;          // 16px (原来是 18px)
+$font-size-xl: 1.125rem;      // 18px (原来是 20px)
+
+// 过渡动画
+$transition-base: all 0.3s ease;
+$transition-fast: all 0.15s ease;
+$transition-slow: all 0.5s ease;
+
+// =============================================================================
+// 混入 (Mixins)
+// =============================================================================
+
+// 响应式断点
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  }
+}
+
+// 玻璃拟态效果
+@mixin glassmorphism($bg-opacity: 0.1, $border-opacity: 0.2) {
+  background: rgba(255, 255, 255, $bg-opacity);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, $border-opacity);
+  border-radius: $border-radius-lg;
+}
+
+// 渐变背景
+@mixin gradient-bg($start-color, $end-color, $direction: 135deg) {
+  background: linear-gradient($direction, $start-color 0%, $end-color 100%);
+}
+
+
+@mixin input-base {
+  width: 100%;
+  padding: $spacing-xs $spacing-sm;
+  border: 1px solid $border-primary;
+  border-radius: $border-radius-md;
+  background: rgba(255, 255, 255, 0.9);
+  color: $text-primary;
+  font-family: $font-family-base;
+  font-size: $font-size-sm;
+  transition: $transition-base;
+  
+  &::placeholder {
+    color: $text-muted;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+  }
+}
+
+// =============================================================================
+// 全局样式重置
+// =============================================================================
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: 1.6;
+  color: $text-primary;
+  background: $bg-primary;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+// 滚动条样式
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: $border-radius-sm;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+}
+
+// =============================================================================
+// 动画效果
+// =============================================================================
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-20px) rotate(120deg);
+  }
+  66% {
+    transform: translateY(10px) rotate(240deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+    max-height: 1000px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// =============================================================================
+// 工具类
+// =============================================================================
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.d-none { display: none; }
+.d-block { display: block; }
+.d-flex { display: flex; }
+.d-inline-flex { display: inline-flex; }
+
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+
+.align-center { align-items: center; }
+.align-start { align-items: flex-start; }
+.align-end { align-items: flex-end; }
+
+.flex-column { flex-direction: column; }
+.flex-row { flex-direction: row; }
+
+.w-100 { width: 100%; }
+.h-100 { height: 100%; }
+
+.m-0 { margin: 0; }
+.p-0 { padding: 0; }
+
+// 动画类
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.6s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+
+// 导入组件样式
+@import 'app';
+@import 'components/button';
+@import 'components/navigation';
+@import 'components/page-loading-fallback';
+@import 'components/async-route';
+@import 'components/history-manager';
+@import 'pages/clipboard-list';
+@import 'pages/settings'; 

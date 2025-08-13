@@ -1,0 +1,794 @@
+// =============================================================================
+// Clipboard List 页面样式
+// =============================================================================
+
+.clipboard-list-page {
+  // 移动端样式 (默认)
+  
+  // 小屏幕 (576px+)
+  @include respond-to(sm) {
+    .page-header {
+      padding: $spacing-xl $spacing-lg;
+      
+      .header-icon {
+        font-size: 3.5rem;
+      }
+      
+      h1 {
+        font-size: $font-size-xl;
+      }
+      
+      p {
+        font-size: $font-size-lg;
+      }
+    }
+  }
+  
+  // 中等屏幕 (768px+)
+  @include respond-to(md) {
+    .page-header {
+      padding: $spacing-xxl $spacing-xl;
+      margin-bottom: $spacing-xxl;
+      
+      .header-icon {
+        font-size: 4rem;
+        margin-bottom: $spacing-lg;
+      }
+      
+      h1 {
+        font-size: $font-size-xl;
+        margin-bottom: $spacing-lg;
+      }
+      
+      p {
+        font-size: $font-size-lg;
+        max-width: 700px;
+      }
+      
+      .header-decoration {
+        width: 80px;
+        height: 80px;
+        top: $spacing-lg;
+        right: $spacing-lg;
+        
+        &::before {
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
+  }
+  
+  // 大屏幕 (992px+)
+  @include respond-to(lg) {
+    .page-header {
+      padding: $spacing-xxl;
+      
+      .header-icon {
+        font-size: 4.5rem;
+      }
+      
+      h1 {
+        font-size: $font-size-xl;
+      }
+      
+      p {
+        font-size: $font-size-lg;
+        max-width: 800px;
+      }
+    }
+  }
+  
+  // 配置提示区域
+  .config-prompt-section {
+    background: rgba(255, 255, 255, 0.9);
+    padding: $spacing-md;
+    margin-bottom: $spacing-md;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: $border-radius-lg;
+    border-left: 4px solid $primary-color;   // 左侧强调色
+    
+    .config-prompt {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+      text-align: center;
+      
+      .prompt-icon {
+        font-size: 2rem;
+        color: $primary-color;
+      }
+      
+      .prompt-content {
+        h3 {
+          margin: 0 0 $spacing-xs 0;
+          color: $text-primary;
+          font-size: $font-size-base;
+        }
+        
+        p {
+          margin: 0 0 $spacing-sm 0;
+          color: $text-secondary;
+          line-height: 1.4;
+        }
+      }
+    }
+  }
+  
+  // Gist 同步区域
+  .gist-sync-section {
+    background: rgba(255, 255, 255, 0.9);
+    padding: $spacing-md;
+    margin-bottom: $spacing-md;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: $border-radius-lg;
+    border-left: 4px solid $primary-color;   // 左侧强调色
+    
+    .gist-sync-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: $spacing-sm;
+      gap: 12px;
+    }
+
+    h3 {
+      margin: 0 0 $spacing-sm 0;
+      color: $text-primary;
+      font-size: $font-size-base;
+      flex-shrink: 0;
+    }
+    
+    .sync-info {
+      display: flex;
+      gap: $spacing-xs;
+      margin-bottom: $spacing-sm;
+      padding: $spacing-sm;
+      background: rgba(102, 126, 234, 0.1);
+      border-radius: $border-radius-md;
+      font-size: $font-size-sm;
+      
+      span {
+        color: $text-secondary;
+        font-family: $font-family-mono;
+      }
+    }
+    
+    .sync-controls {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+      
+      .auto-load-info {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
+        padding: $spacing-sm;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: $border-radius-md;
+        
+        .info-text {
+          color: $text-secondary;
+          font-weight: 500;
+          font-size: $font-size-sm;
+        }
+        
+        .last-sync {
+          color: $text-muted;
+          font-size: $font-size-sm;
+          font-style: italic;
+        }
+      }
+      
+      .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
+      }
+    }
+  }
+  
+  // 历史数据管理区域
+  .history-section {
+    background: rgba(255, 255, 255, 0.9);
+    padding: $spacing-md;
+    margin-bottom: $spacing-md;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: $border-radius-lg;
+    border-left: 4px solid $secondary-color; // 左侧强调色
+    
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: $spacing-sm;
+      
+      .button-collapse {
+        transform: rotate(0deg);
+      }
+    
+      .button-expand {
+        transform: rotate(90deg);
+      }
+      h3 {
+        margin: 0;
+        color: $text-primary;
+        font-size: $font-size-base;
+      }
+      
+      .collapse-button {
+        background: transparent;
+        border: none;
+        color: $text-secondary;
+        font-size: $font-size-base;
+        cursor: pointer;
+        padding: $spacing-xs;
+        border-radius: $border-radius-sm;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          color: $text-primary;
+          background: rgba(0, 0, 0, 0.05);
+          transform: scale(1.05);
+        }
+        
+        &:focus {
+          outline: none;
+          box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3);
+        }
+      }
+    }
+    
+    .history-controls {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+      animation: slideDown 0.3s ease-out;
+      
+      .history-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
+        
+      }
+      
+      .history-settings {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-md;
+        
+        .input-group {
+          label {
+            display: block;
+            color: $text-secondary;
+            margin-bottom: $spacing-sm;
+            font-size: $font-size-sm;
+          }
+          
+          input {
+            @include input-base;
+          }
+        }
+      }
+    }
+    
+    .history-info {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+      margin-top: $spacing-md;
+      padding: $spacing-md;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: $border-radius-md;
+      font-size: $font-size-sm;
+      animation: slideDown 0.3s ease-out;
+      
+      span {
+        color: $text-secondary;
+        
+        &.warning {
+          color: $primary-color;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+  
+  // 显示设置区域
+  .settings-section {
+    background: rgba(255, 255, 255, 0.9);
+    padding: $spacing-md;
+    margin-bottom: $spacing-md;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: $border-radius-lg;
+    border-left: 4px solid $primary-color;   // 左侧强调色
+    
+    .settings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: $spacing-sm;
+      
+      h3 {
+        margin: 0;
+        color: $text-primary;
+        font-size: $font-size-base;
+      }
+      
+      .collapse-button {
+        background: transparent;
+        border: none;
+        color: $text-secondary;
+        font-size: $font-size-base;
+        cursor: pointer;
+        padding: $spacing-xs;
+        border-radius: $border-radius-sm;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          color: $text-primary;
+          background: rgba(255, 255, 255, 0.1);
+          transform: scale(1.05);
+        }
+        
+        &:focus {
+          outline: none;
+          box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3);
+        }
+      }
+    }
+    
+    .display-options {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+      animation: slideDown 0.3s ease-out;
+      
+      .input-group {
+        label {
+          display: block;
+          color: $text-secondary;
+          margin-bottom: $spacing-xs;
+          font-size: $font-size-sm;
+        }
+        
+        select, input {
+          @include input-base;
+        }
+      }
+      
+      .sync-info {
+        padding: $spacing-sm;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: $border-radius-md;
+        text-align: center;
+        
+        span {
+          color: $text-muted;
+          font-size: $font-size-sm;
+        }
+      }
+    }
+  }
+  
+  // 错误提示
+  .error-message {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    color: $text-primary;
+    padding: $spacing-sm;
+    border-radius: $border-radius-md;
+    margin-bottom: $spacing-md;
+    text-align: center;
+  }
+  
+  // 剪贴板列表区域
+  .clipboard-section {
+    background: rgba(255, 255, 255, 0.9);
+    padding: $spacing-md;
+    margin-bottom: $spacing-md;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: $border-radius-lg;
+    
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: $spacing-sm;
+      margin-bottom: $spacing-lg;
+      
+      h3 {
+        margin: 0;
+        color: $text-primary;
+        font-size: $font-size-base;
+      }
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: $spacing-lg;
+      color: $text-muted;
+      
+      p {
+        margin: 0 0 $spacing-xs 0;
+        font-size: $font-size-sm;
+        
+        &:last-child {
+          font-size: $font-size-sm;
+        }
+      }
+    }
+    
+    .clipboard-list {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+      
+      .clipboard-item {
+        background: rgba(255, 255, 255, 0.7);
+        padding: $spacing-sm;
+        cursor: pointer;
+        transition: $transition-base;
+        position: relative;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        border-radius: $border-radius-md;
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.9);
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        &.copied {
+          background: rgba(102, 126, 234, 0.1);
+          border-color: rgba(102, 126, 234, 0.3);
+        }
+        
+        .item-content {
+          .content-text {
+            color: $text-primary;
+            margin-bottom: $spacing-xs;
+            line-height: 1.4;
+            word-break: break-word;
+            font-size: $font-size-sm;
+          }
+          
+          .item-meta {
+            display: flex;
+            flex-direction: column;
+            gap: $spacing-xs;
+            font-size: $font-size-sm;
+            
+            .timestamp {
+              color: $text-muted;
+            }
+            
+            .copy-status {
+              color: $text-secondary;
+              font-weight: 500;
+            }
+          }
+        }
+        
+        .delete-button {
+          position: absolute;
+          top: $spacing-xs;
+          right: $spacing-xs;
+          width: 28px;
+          height: 28px;
+          padding: 0;
+          font-size: $font-size-sm;
+          
+          &:hover {
+            transform: scale(1.05);
+          }
+        }
+      }
+    }
+  }
+  
+  // 浮动粘贴按钮
+  .floating-paste-button {
+    position: fixed;
+    bottom: $spacing-md;
+    right: $spacing-md;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: $font-size-lg;
+    box-shadow: $shadow-md;
+    z-index: 1000;
+    
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: $shadow-lg;
+    }
+  }
+  
+  // 模态框样式
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-sm;
+    z-index: 2000;
+    
+    .modal-content {
+      background: rgba(255, 255, 255, 0.95);
+      width: 100%;
+      max-width: 450px;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: $spacing-md;
+      border-radius: $border-radius-lg;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      
+      h3 {
+        margin: 0 0 $spacing-md 0;
+        color: $text-primary;
+        font-size: $font-size-base;
+        text-align: center;
+      }
+      
+      .input-group {
+        margin-bottom: $spacing-md;
+        
+        label {
+          display: block;
+          color: $text-secondary;
+          margin-bottom: $spacing-xs;
+          font-size: $font-size-sm;
+        }
+        
+        textarea {
+          @include input-base;
+          resize: vertical;
+          min-height: 100px;
+        }
+        
+        .help-text {
+          color: $text-muted;
+          font-size: $font-size-sm;
+          margin-top: $spacing-xs;
+        }
+      }
+      
+      .modal-actions {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
+      }
+      
+      // 历史版本模态框特殊样式
+      &.history-modal {
+        max-width: 550px;
+        
+        .history-list {
+          max-height: 350px;
+          overflow-y: auto;
+          margin: $spacing-md 0;
+          
+          .history-version {
+            display: flex;
+            flex-direction: column;
+            gap: $spacing-xs;
+            padding: $spacing-sm;
+            margin-bottom: $spacing-xs;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: $border-radius-md;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: $transition-base;
+            
+            &:hover {
+              background: rgba(255, 255, 255, 0.9);
+              transform: translateY(-1px);
+            }
+            
+            &.current {
+              background: rgba(102, 126, 234, 0.1);
+              border-color: rgba(102, 126, 234, 0.3);
+            }
+            
+            .version-info {
+              display: flex;
+              flex-direction: column;
+              gap: $spacing-xs;
+              
+              .version-number {
+                font-weight: 600;
+                color: $text-primary;
+              }
+              
+              .version-time {
+                color: $text-secondary;
+                font-size: $font-size-sm;
+              }
+              
+              .version-count {
+                color: $text-muted;
+                font-size: $font-size-sm;
+              }
+            }
+            
+            .version-actions {
+              display: flex;
+              justify-content: center;
+              
+              .current-badge {
+                background: rgba(102, 126, 234, 0.8);
+                color: $text-primary;
+                padding: $spacing-xs $spacing-sm;
+                border-radius: $border-radius-lg;
+                font-size: $font-size-sm;
+                font-weight: 500;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // 响应式设计 - 小屏幕 (576px+)
+  @include respond-to(sm) {
+    .config-prompt {
+      flex-direction: row;
+      text-align: left;
+      gap: $spacing-md;
+      
+      .prompt-icon {
+        font-size: 1.75em;
+      }
+    }
+    
+    .sync-info {
+      flex-direction: row;
+      gap: $spacing-md;
+      text-align: center;
+    }
+    
+    .sync-controls {
+      .button-group {
+        flex-direction: row;
+        gap: $spacing-sm;
+      }
+    }
+    
+    .history-controls {
+      .history-buttons {
+        flex-direction: row;
+        gap: $spacing-sm;
+      }
+      
+      .history-settings {
+        flex-direction: row;
+        align-items: center;
+        gap: $spacing-md;
+      }
+    }
+    
+    .history-info {
+      flex-direction: row;
+      gap: $spacing-md;
+      text-align: center;
+    }
+    
+    .display-options {
+      .input-group {
+        flex-direction: row;
+        align-items: center;
+        gap: $spacing-sm;
+        
+        label {
+          min-width: 100px;
+          margin-bottom: 0;
+        }
+        
+        select, input {
+          width: auto;
+          flex: 1;
+        }
+      }
+    }
+    
+    .section-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-content {
+      .modal-actions {
+        flex-direction: row;
+        gap: $spacing-sm;
+      }
+      
+      &.history-modal {
+        .history-version {
+          flex-direction: row;
+          align-items: center;
+          gap: $spacing-md;
+          
+          .version-actions {
+            justify-content: flex-end;
+          }
+        }
+      }
+    }
+  }
+  
+  // 响应式设计 - 中等屏幕 (768px+)
+  @include respond-to(md) {
+    .page-header {
+      h1 {
+        font-size: $font-size-lg;
+      }
+      
+      p {
+        font-size: $font-size-base;
+      }
+    }
+    
+    .config-prompt {
+      .prompt-icon {
+        font-size: 2rem;
+      }
+    }
+    
+    .sync-controls {
+      .button-group {
+        gap: $spacing-md;
+      }
+    }
+    
+    .history-controls {
+      .history-buttons {
+        gap: $spacing-md;
+      }
+    }
+    
+    .display-options {
+      .input-group {
+        gap: $spacing-md;
+        
+        label {
+          min-width: 120px;
+        }
+      }
+    }
+  }
+  
+  // 响应式设计 - 大屏幕 (992px+)
+  @include respond-to(lg) {
+    .page-header {
+      h1 {
+        font-size: $font-size-lg; // 保持适中的标题大小
+      }
+    }
+    
+    .config-prompt {
+      .prompt-icon {
+        font-size: 2.25rem;
+      }
+    }
+    
+    .sync-controls {
+      .button-group {
+        gap: $spacing-lg;
+      }
+    }
+    
+    .history-controls {
+      .history-buttons {
+        gap: $spacing-lg;
+      }
+    }
+  }
+} 

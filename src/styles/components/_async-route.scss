@@ -1,0 +1,82 @@
+// =============================================================================
+// Async Route 组件样式
+// =============================================================================
+
+.async-route {
+  width: 100%;
+  min-height: 100vh;
+  
+  // 错误边界样式
+  .error-boundary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 250px;
+    padding: $spacing-lg;
+    text-align: center;
+    
+    .error-icon {
+      font-size: 2.5rem;
+      color: $primary-color;
+      margin-bottom: $spacing-sm;
+    }
+    
+    .error-title {
+      color: $text-primary;
+      font-size: $font-size-lg;
+      font-weight: 600;
+      margin-bottom: $spacing-xs;
+    }
+    
+    .error-message {
+      color: $text-secondary;
+      font-size: $font-size-sm;
+      margin-bottom: $spacing-md;
+      max-width: 450px;
+    }
+    
+    .error-actions {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-xs;
+      
+    }
+    
+    // 小屏幕 (576px+)
+    @include respond-to(sm) {
+      min-height: 300px;
+      padding: $spacing-xl;
+      
+      .error-icon {
+        font-size: 3rem;
+      }
+      
+      .error-title {
+        font-size: $font-size-lg;
+      }
+      
+      .error-actions {
+        flex-direction: row;
+        gap: $spacing-sm;
+      }
+    }
+    
+    // 中等屏幕 (768px+)
+    @include respond-to(md) {
+      min-height: 350px;
+      
+      .error-icon {
+        font-size: 3.5rem;
+      }
+      
+      .error-title {
+        font-size: $font-size-lg;
+      }
+      
+      .error-message {
+        font-size: $font-size-base;
+      }
+    }
+  }
+} 

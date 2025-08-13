@@ -1,0 +1,68 @@
+// =============================================================================
+// Page Loading Fallback 组件样式
+// =============================================================================
+
+.page-loading-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 150px;
+  padding: $spacing-lg;
+  text-align: center;
+  
+  // 移动端样式 (默认)
+  .loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid $text-primary;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: $spacing-sm;
+  }
+  
+  .loading-text {
+    color: $text-secondary;
+    font-size: $font-size-sm;
+    margin: 0;
+  }
+  
+  // 小屏幕 (576px+)
+  @include respond-to(sm) {
+    min-height: 200px;
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border-width: 3px;
+    }
+    
+    .loading-text {
+      font-size: $font-size-base;
+    }
+  }
+  
+  // 中等屏幕 (768px+)
+  @include respond-to(md) {
+    min-height: 250px;
+    padding: $spacing-xl;
+    
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border-width: 3px;
+      margin-bottom: $spacing-md;
+    }
+    
+    .loading-text {
+      font-size: $font-size-base;
+    }
+  }
+}
+
+// 旋转动画
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+} 
