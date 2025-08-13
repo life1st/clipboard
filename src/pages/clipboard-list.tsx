@@ -3,7 +3,7 @@ import { useClipboardStore, useSettingsStore } from '../store';
 import { updateGistFile } from '../request';
 import { Link } from 'react-router-dom';
 import Button from '../components/button';
-import { SORT_OPTIONS, SORT_ORDERS, SORT_LABELS, SORT_ORDER_LABELS, DISPLAY_LIMITS, HISTORY_LIMITS } from '../constants';
+import { SORT_OPTIONS, SORT_ORDERS, SORT_LABELS, SORT_ORDER_LABELS, DISPLAY_LIMITS } from '../constants';
 
 const ClipboardList: React.FC = () => {
   const { 
