@@ -1,3 +1,10 @@
+// =============================================================================
+// Modal 组件样式
+// =============================================================================
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -6,12 +13,11 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   z-index: 1000;
-  padding: 20px;
+  padding: $spacing-md;
   backdrop-filter: blur(4px);
-  animation: fadeIn 0.2s ease-out;
 }
 
 .modal-container {

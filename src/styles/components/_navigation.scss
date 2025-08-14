@@ -2,15 +2,20 @@
 // Navigation 组件样式
 // =============================================================================
 
+@use '../variables' as *;
+@use '../mixins' as *;
+
 .navigation {
-  background: rgba(255, 255, 255, 0.95);
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 1000;
-  padding: $spacing-sm;
-  margin-bottom: $spacing-md;
-  backdrop-filter: blur(10px);  // 保留轻微模糊效果
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: $spacing-sm $spacing-md;
+  margin-bottom: $spacing-md;
   transition: all 0.3s ease;
   border-radius: 0 0 $border-radius-lg $border-radius-lg;
   

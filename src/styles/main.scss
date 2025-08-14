@@ -1,120 +1,24 @@
 // =============================================================================
-// 全局变量和配置
+// 样式文件引入 - 必须在文件开头
 // =============================================================================
 
+@use 'variables' as *;
+@use 'mixins' as *;
+@use 'app';
+@use 'components/button';
+@use 'components/input';
+@use 'components/navigation';
+@use 'components/page-loading-fallback';
+@use 'components/async-route';
+@use 'components/history-manager';
+@use 'components/qr-code';
+@use 'components/modal';
+@use 'components/toast';
+@use 'pages/clipboard-list';
+@use 'pages/settings';
 
 // =============================================================================
-
-// 主要颜色
-$primary-color: #667eea;        // 蓝色
-$secondary-color: #764ba2;      // 紫色
-
-$bg-primary: transparent;
-$bg-secondary: rgba(255, 255, 255, 0.05);   // 轻微的背景色
-$bg-dark: rgba(0, 0, 0, 0.1);               // 轻微深色背景
-$bg-light: rgba(255, 255, 255, 0.02);       // 极轻微浅色背景
-
-$border-primary: rgba(0, 0, 0, 0.1);        // 深色边框
-$border-secondary: rgba(0, 0, 0, 0.05);     // 浅色边框
-$border-light: rgba(0, 0, 0, 0.02);         // 极浅边框
-
-$text-primary: #333333;                     // 深色文字
-$text-secondary: #666666;                   // 中等灰色文字
-$text-muted: #999999;                       // 浅灰色文字
-$text-light: #cccccc;                       // 极浅灰色文字
-
-
-$spacing-xs: 2px;   // 2px
-$spacing-sm: 6px;   // 6px
-$spacing-md: 12px;  // 12px
-$spacing-lg: 16px;  // 16px
-$spacing-xl: 24px;  // 24px
-$spacing-xxl: 32px; // 32px
-
-
-$border-radius-sm: 4px;   // 4px
-$border-radius-md: 6px;   // 6px
-$border-radius-lg: 8px;   // 8px
-$border-radius-xl: 12px;  // 12px
-
-// 阴影
-$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-
-// 断点系统 (移动优先)
-$breakpoint-mobile: 0;     // 移动设备
-$breakpoint-desktop: 768px; // PC 设备
-
-
-$font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-$font-family-mono: 'Courier New', Courier, monospace;
-$font-size-base: 14px;    // 14px
-$font-size-sm: 12px;      // 12px
-$font-size-lg: 16px;      // 16px
-$font-size-xl: 18px;      // 18px
-
-// 过渡动画
-$transition-base: all 0.3s ease;
-$transition-fast: all 0.15s ease;
-$transition-slow: all 0.5s ease;
-
-// =============================================================================
-// 混入 (Mixins)
-// =============================================================================
-
-// 响应式断点
-@mixin respond-to($breakpoint) {
-  @if $breakpoint == 'mobile' {
-    @media (min-width: $breakpoint-mobile) {
-      @content;
-    }
-  } @else if $breakpoint == 'desktop' {
-    @media (min-width: $breakpoint-desktop) {
-      @content;
-    }
-  }
-}
-
-// 玻璃拟态效果
-@mixin glassmorphism($bg-opacity: 0.1, $border-opacity: 0.2) {
-  background: rgba(255, 255, 255, $bg-opacity);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, $border-opacity);
-  border-radius: $border-radius-lg;
-}
-
-// 渐变背景
-@mixin gradient-bg($start-color, $end-color, $direction: 135deg) {
-  background: linear-gradient($direction, $start-color 0%, $end-color 100%);
-}
-
-
-@mixin input-base {
-  width: 100%;
-  padding: $spacing-xs $spacing-sm;
-  border: 1px solid $border-primary;
-  border-radius: $border-radius-md;
-  background: rgba(255, 255, 255, 0.9);
-  color: $text-primary;
-  font-family: $font-family-base;
-  font-size: $font-size-sm;
-  transition: $transition-base;
-  
-  &::placeholder {
-    color: $text-muted;
-  }
-  
-  &:focus {
-    outline: none;
-    border-color: $primary-color;
-    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
-  }
-}
-
-// =============================================================================
-// 全局样式重置
+// 全局样式重置和基础样式
 // =============================================================================
 
 * {
@@ -364,18 +268,4 @@ body {
   .block-desktop {
     display: block;
   }
-}
-
-// 导入组件样式
-@import 'app';
-@import 'components/button';
-@import 'components/input';
-@import 'components/navigation';
-@import 'components/page-loading-fallback';
-@import 'components/async-route';
-@import 'components/history-manager';
-@import 'components/qr-code';
-@import 'components/modal';
-@import 'components/toast';
-@import 'pages/clipboard-list';
-@import 'pages/settings'; 
+} 

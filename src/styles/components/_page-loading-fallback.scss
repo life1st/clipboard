@@ -2,12 +2,15 @@
 // Page Loading Fallback 组件样式
 // =============================================================================
 
+@use '../variables' as *;
+@use '../mixins' as *;
+
 .page-loading-fallback {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 150px;
+  min-height: 100vh;
   padding: $spacing-lg;
   text-align: center;
   

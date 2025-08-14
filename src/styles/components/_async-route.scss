@@ -2,6 +2,9 @@
 // Async Route 组件样式
 // =============================================================================
 
+@use '../variables' as *;
+@use '../mixins' as *;
+
 .async-route {
   width: 100%;
   min-height: 100vh;

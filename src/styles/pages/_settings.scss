@@ -2,7 +2,13 @@
 // Settings 页面样式
 // =============================================================================
 
+@use '../variables' as *;
+@use '../mixins' as *;
+
 .settings-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $bg-secondary 0%, $bg-primary 100%);
+  padding: $spacing-md;
   // 移动端样式 (默认)
   .page-header {
     background: rgba(255, 255, 255, 0.9);

@@ -1,0 +1,54 @@
+// =============================================================================
+// 设计系统 Mixins
+// =============================================================================
+
+@use 'variables' as *;
+
+// 响应式断点
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == 'mobile' {
+    @media (min-width: $breakpoint-mobile) {
+      @content;
+    }
+  } @else if $breakpoint == 'desktop' {
+    @media (min-width: $breakpoint-desktop) {
+      @content;
+    }
+  }
+}
+
+// 玻璃拟态效果
+@mixin glassmorphism($bg-opacity: 0.1, $border-opacity: 0.2) {
+  background: rgba(255, 255, 255, $bg-opacity);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, $border-opacity);
+  border-radius: $border-radius-lg;
+}
+
+// 渐变背景
+@mixin gradient-bg($start-color, $end-color, $direction: 135deg) {
+  background: linear-gradient($direction, $start-color 0%, $end-color 100%);
+}
+
+// 输入框基础样式
+@mixin input-base {
+  width: 100%;
+  padding: $spacing-xs $spacing-sm;
+  border: 1px solid $border-primary;
+  border-radius: $border-radius-md;
+  background: rgba(255, 255, 255, 0.9);
+  color: $text-primary;
+  font-family: $font-family-base;
+  font-size: $font-size-sm;
+  transition: $transition-base;
+  
+  &::placeholder {
+    color: $text-muted;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+  }
+} 

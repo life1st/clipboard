@@ -2,6 +2,9 @@
 // App 全局样式
 // =============================================================================
 
+@use 'variables' as *;
+@use 'mixins' as *;
+
 .app {
   min-height: 100vh;
   background: #f8f9fa;

@@ -2,7 +2,14 @@
 // Clipboard List 页面样式
 // =============================================================================
 
+@use '../variables' as *;
+@use '../mixins' as *;
+
 .clipboard-list-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $bg-secondary 0%, $bg-primary 100%);
+  padding: $spacing-md;
+  
   // 移动端样式 (默认)
   
   // 小屏幕 (576px+)
