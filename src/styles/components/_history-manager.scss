@@ -5,103 +5,85 @@
 @use '../variables' as *;
 @use '../mixins' as *;
 
-.history-manager {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: $border-radius-lg;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: $shadow-lg;
-  overflow: hidden;
-  
-  .history-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: $spacing-md;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    
-    h3 {
-      margin: 0;
-      color: $text-primary;
-      font-size: $font-size-base;
-    }
-  }
-  
-  .history-controls {
-    padding: $spacing-md;
-    
-    .history-buttons {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: $spacing-xs;
-      margin-bottom: $spacing-md;
-    }
-    
-    .history-settings {
-      .input-group {
-        display: flex;
-        align-items: center;
-        gap: $spacing-sm;
-        
-        label {
-          font-size: $font-size-sm;
-          color: $text-secondary;
-          min-width: 120px;
-        }
-        
-        input {
-          @include input-base;
-          width: 80px;
-        }
-      }
-    }
-  }
-  
-  .history-info {
-    padding: $spacing-sm $spacing-md;
-    background: rgba(102, 126, 234, 0.1);
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-    font-size: $font-size-sm;
-    color: $text-secondary;
-    
-    .warning {
-      color: #e53e3e;
-      margin-left: $spacing-sm;
-    }
-  }
-}
-
-// 历史版本模态框样式
 .history-modal {
-  max-width: 600px;
+  width: 100%;
+  
+  .modal-container {
+    background-color: transparent;
+    box-shadow: none;
+    max-width: none;
+    width: 100%;
+  }
+  .modal-title {
+    color: #f0f4ff;
+    text-align: center;
+  }
+  
+  .modal-content {
+    padding: 0;
+    background: transparent;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .modal-header {
+    background: transparent;
+    border-bottom: none;
+    padding: 0 0 $spacing-lg 0;
+    margin-bottom: $spacing-lg;
+    max-width: 800px;
+    margin: 0 auto;
+    
+    h2 {
+      font-size: 24px;
+      font-weight: 600;
+      color: white;
+      text-align: center;
+    }
+  }
   
   .history-list {
-    max-height: 400px;
-    overflow-y: auto;
-    margin: $spacing-md 0;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
     
     .history-version {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: $spacing-sm;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      border-radius: $border-radius-md;
-      margin-bottom: $spacing-xs;
-      background: rgba(255, 255, 255, 0.7);
+      padding: $spacing-lg;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: $border-radius-lg;
+      background: #fafbfc;
+      transition: all 0.2s ease;
+      width: 100%;
+      
+      &:hover {
+        background: #f5f7fa;
+        border-color: rgba(0, 0, 0, 0.12);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
       
       &.current {
-        background: rgba(102, 126, 234, 0.1);
+        background: #f0f4ff;
         border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
       }
       
       .version-info {
         display: flex;
         flex-direction: column;
         gap: $spacing-xs;
+        flex: 1;
         
         .version-number {
           font-weight: 600;
           color: $text-primary;
+          font-size: $font-size-base;
         }
         
         .version-time {
@@ -116,15 +98,26 @@
       }
       
       .version-actions {
+        flex-shrink: 0;
+        margin-left: $spacing-md;
+        
         .current-badge {
           background: $primary-color;
           color: white;
           padding: $spacing-xs $spacing-sm;
           border-radius: $border-radius-sm;
           font-size: $font-size-sm;
+          font-weight: 500;
         }
       }
     }
+  }
+  
+  .modal-actions {
+    margin-top: $spacing-xl;
+    padding-top: $spacing-lg;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    text-align: center;
   }
 }
 

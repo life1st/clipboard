@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useClipboardStore } from '../store';
 import { HISTORY_LIMITS } from '../constants';
 import Button from './button';
+import Modal from './modal';
 
 const HistoryManager: React.FC = () => {
   const {
@@ -115,57 +116,56 @@ const HistoryManager: React.FC = () => {
       )}
 
       {/* 历史版本模态框 */}
-      {showHistoryModal && (
-        <div className="modal-overlay" onClick={() => setShowHistoryModal(false)}>
-          <div className="modal-content history-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>历史版本管理</h3>
-            
-            <div className="history-list">
-              {history.map((version, index) => (
-                <div 
-                  key={index} 
-                  className={`history-version ${index === currentHistoryIndex ? 'current' : ''}`}
-                >
-                  <div className="version-info">
-                    <span className="version-number">版本 {index + 1}</span>
-                    <span className="version-time">{formatHistoryTime(index)}</span>
-                    <span className="version-count">{version.length} 个项目</span>
-                  </div>
-                  
-                  <div className="version-actions">
-                    {index !== currentHistoryIndex && (
-                      <Button 
-                        variant="primary"
-                        size="sm"
-                        onClick={() => {
-                          restoreFromHistory(index);
-                          setShowHistoryModal(false);
-                        }}
-                        title="恢复到此版本"
-                      >
-                        恢复
-                      </Button>
-                    )}
-                    {index === currentHistoryIndex && (
-                      <span className="current-badge">当前版本</span>
-                    )}
-                  </div>
-                </div>
-              ))}
+      <Modal
+        isOpen={showHistoryModal}
+        onClose={() => setShowHistoryModal(false)}
+        title="📚 历史版本管理"
+        className="history-modal"
+      >
+        <div className="history-list">
+          {history.map((version, index) => (
+            <div 
+              key={index} 
+              className={`history-version ${index === currentHistoryIndex ? 'current' : ''}`}
+            >
+              <div className="version-info">
+                <span className="version-number">版本 {index + 1}</span>
+                <span className="version-time">{formatHistoryTime(index)}</span>
+                <span className="version-count">{version.length} 个项目</span>
+              </div>
+              
+              <div className="version-actions">
+                {index !== currentHistoryIndex && (
+                  <Button 
+                    variant="primary"
+                    size="sm"
+                    onClick={() => {
+                      restoreFromHistory(index);
+                      setShowHistoryModal(false);
+                    }}
+                    title="恢复到此版本"
+                  >
+                    恢复
+                  </Button>
+                )}
+                {index === currentHistoryIndex && (
+                  <span className="current-badge">当前版本</span>
+                )}
+              </div>
             </div>
-            
-            <div className="modal-actions">
-              <Button 
-                variant="ghost"
-                onClick={() => setShowHistoryModal(false)}
-                fullWidth
-              >
-                关闭
-              </Button>
-            </div>
-          </div>
+          ))}
         </div>
-      )}
+        
+        <div className="modal-actions">
+          <Button 
+            variant="secondary"
+            onClick={() => setShowHistoryModal(false)}
+            fullWidth
+          >
+            关闭
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };
