@@ -7,22 +7,38 @@
 
 .toast {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 16px;
+  right: 16px;
+  left: 16px;
   z-index: 1000;
-  max-width: 400px;
+  max-width: none;
+  min-width: auto;
+  width: calc(100% - 32px);
   background: rgba(255, 255, 255, 0.95);
-  border-radius: $border-radius-lg;
+  border-radius: $border-radius-md;
   box-shadow: $shadow-lg;
   border: 1px solid rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
-  animation: slideIn 0.3s ease-out;
+  animation: slideInRight 0.3s ease-out;
   overflow: hidden;
+  
+  // 添加 flexbox 布局
+  display: flex;
+  align-items: center;
+  padding: $spacing-md $spacing-lg;
+  gap: $spacing-sm;
+  
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: all .3s;
+  &.toast-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .toast-icon {
   font-size: $font-size-xl;
-  margin-right: $spacing-sm;
   flex-shrink: 0;
 }
 
@@ -32,6 +48,7 @@
   color: inherit;
   margin: 0;
   word-break: break-word;
+  flex: 1;
 }
 
 .toast-close {
@@ -40,21 +57,12 @@
   font-size: $font-size-base;
   color: #9ca3af;
   cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
+  padding: 3px 6px;
+  border-radius: $border-radius-sm;
   line-height: 1;
   flex-shrink: 0;
   transition: all 0.2s ease;
-  
-  &:hover {
-    background: #f3f4f6;
-    color: #6b7280;
-  }
-  
-  &:focus {
-    outline: 2px solid #3b82f6;
-    outline-offset: 2px;
-  }
+  margin-left: auto;
 }
 
 // Toast 类型样式
@@ -94,71 +102,21 @@
   }
 }
 
-// 响应式设计
-@media (max-width: 640px) {
-  .toast-container {
-    top: 16px;
-    right: 16px;
-    left: 16px;
-  }
-  
+// 桌面端样式
+@media (min-width: 641px) {
   .toast {
-    min-width: auto;
-    max-width: none;
-    width: 100%;
-    transform: translateY(-100%);
+    top: 20px;
+    right: 20px;
+    left: auto;
+    max-width: 380px;
+    min-width: 300px;
+    width: auto;
+    border-radius: $border-radius-lg;
     
-    &:hover {
-      transform: translateY(0) scale(1.02);
-    }
+    transform: translateX(100%);
     
     &.toast-visible {
-      transform: translateY(0);
+      transform: translateX(0);
     }
-  }
-}
-
-// 动画
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideInTop {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideOutRight {
-  from {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-}
-
-@keyframes slideOutTop {
-  from {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(-100%);
-    opacity: 0;
   }
 } 

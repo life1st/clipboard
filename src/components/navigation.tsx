@@ -10,35 +10,40 @@ const Navigation: React.FC = () => {
   };
 
   return (
-    <nav className="navigation">
-      <div className="nav-container">
-        <NavLink to="/" className="nav-brand">
-          <span className="nav-title">Clipboard</span>
-        </NavLink>
-        
-        <ul className="nav-links">
-          <li className="nav-item">
-            <NavLink 
-              to="/clipboard" 
-              className={`nav-link ${isActive('/clipboard') ? 'active' : ''}`}
-              onMouseEnter={() => PagePreloader.preloadPage('/clipboard')}
-            >
-              📋 剪贴板列表
-            </NavLink>
-          </li>
+    <>
+      {/* 占位 div，高度与导航栏一致 */}
+      <div className="navigation-placeholder"></div>
+      
+      <nav className="navigation">
+        <div className="nav-container">
+          <NavLink to="/" className="nav-brand">
+            <span className="nav-title">Clipboard</span>
+          </NavLink>
+          
+          <ul className="nav-links">
+            <li className="nav-item">
+              <NavLink 
+                to="/clipboard" 
+                className={`nav-link ${isActive('/clipboard') ? 'active' : ''}`}
+                onMouseEnter={() => PagePreloader.preloadPage('/clipboard')}
+              >
+                📋 剪贴板列表
+              </NavLink>
+            </li>
 
-          <li className="nav-item">
-            <NavLink 
-              to="/settings" 
-              className={`nav-link ${isActive('/settings') ? 'active' : ''}`}
-              onMouseEnter={() => PagePreloader.preloadPage('/settings')}
-            >
-              ⚙️ 设置
-            </NavLink>
-          </li>
-        </ul>
-      </div>
-    </nav>
+            <li className="nav-item">
+              <NavLink 
+                to="/settings" 
+                className={`nav-link ${isActive('/settings') ? 'active' : ''}`}
+                onMouseEnter={() => PagePreloader.preloadPage('/settings')}
+              >
+                ⚙️ 设置
+              </NavLink>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </>
   );
 };
 

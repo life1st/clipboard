@@ -5,6 +5,17 @@
 @use '../variables' as *;
 @use '../mixins' as *;
 
+// 导航栏占位元素，高度与导航栏一致
+.navigation-placeholder {
+  height: 70px; // 与导航栏高度一致 (padding上下各6px + 内容高度约58px)
+  width: 100%;
+  
+  // 响应式高度调整
+  @media (max-width: 575px) {
+    height: 60px; // 移动端稍微降低高度
+  }
+}
+
 .navigation {
   position: fixed;
   top: 0;
@@ -181,18 +192,6 @@
     
     &:nth-child(1) { animation-delay: 0.1s; }
     &:nth-child(2) { animation-delay: 0.2s; }
-  }
-}
-
-// 导航动画
-@keyframes slideInDown {
-  from {
-    transform: translateY(-20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
   }
 }
 
