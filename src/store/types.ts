@@ -3,7 +3,6 @@ export interface ClipboardItem {
   id: string;
   content: string;
   timestamp: string;
-  copied: boolean;
 }
 
 // Gist 相关类型

@@ -5,21 +5,7 @@
 @use '../variables' as *;
 @use '../mixins' as *;
 
-// 动画定义
-@keyframes bounce {
-  0%, 20%, 53%, 80%, 100% {
-    transform: translate3d(0, 0, 0);
-  }
-  40%, 43% {
-    transform: translate3d(0, -8px, 0);
-  }
-  70% {
-    transform: translate3d(0, -4px, 0);
-  }
-  90% {
-    transform: translate3d(0, -2px, 0);
-  }
-}
+
 
 .modal-overlay {
   position: fixed;
@@ -307,6 +293,86 @@
   }
 }
 
+// 全局粘贴 Modal 样式
+.global-paste-modal {
+  .modal-content {
+    h3 {
+      margin: 0 0 $spacing-md 0;
+      font-size: $font-size-lg;
+      font-weight: 600;
+      color: $text-primary;
+    }
+    
+    .input-group {
+      margin-bottom: $spacing-md;
+      
+      label {
+        display: block;
+        margin-bottom: $spacing-xs;
+        font-size: $font-size-base;
+        font-weight: 500;
+        color: $text-primary;
+      }
+      
+      textarea {
+        width: 100%;
+        padding: $spacing-sm;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: $border-radius-md;
+        font-size: $font-size-base;
+        font-family: inherit;
+        resize: vertical;
+        min-height: 120px;
+        
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+          box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+        }
+      }
+    }
+    
+    .modal-actions {
+      display: flex;
+      gap: $spacing-sm;
+      
+      button {
+        flex: 1;
+        padding: $spacing-sm $spacing-md;
+        border: none;
+        border-radius: $border-radius-md;
+        font-size: $font-size-base;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        
+        &.btn-primary {
+          background: $primary-color;
+          color: white;
+          
+          &:hover:not(:disabled) {
+            background: color-mix(in srgb, $primary-color 90%, black);
+          }
+          
+          &:disabled {
+            background: rgba(0, 0, 0, 0.2);
+            cursor: not-allowed;
+          }
+        }
+        
+        &.btn-secondary {
+          background: rgba(0, 0, 0, 0.05);
+          color: $text-primary;
+          
+          &:hover {
+            background: rgba(0, 0, 0, 0.1);
+          }
+        }
+      }
+    }
+  }
+}
+
 // 响应式设计
 @media (max-width: 640px) {
   .modal-overlay {
@@ -326,6 +392,14 @@
   }
   
   .decrypt-config-modal .decrypt-config-content .modal-actions {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+  
+  .global-paste-modal .modal-content .modal-actions {
     flex-direction: column;
     
     button {

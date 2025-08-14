@@ -34,8 +34,6 @@ interface ClipboardState {
   addItem: (content: string) => void;
   deleteItem: (id: string) => void;
   clearAll: () => void;
-  copyItem: (id: string) => void;
-  resetCopyStatus: (id: string) => void;
   loadFromGist: () => Promise<void>;
   setLoading: (loading: boolean) => void;
   setError: (error: string) => void;
@@ -77,7 +75,6 @@ export const useClipboardStore = create<ClipboardState>()(
           id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
           content: content.trim(),
           timestamp: new Date().toISOString(),
-          copied: false
         };
         
         set((state) => ({
@@ -103,26 +100,6 @@ export const useClipboardStore = create<ClipboardState>()(
         
         // 自动保存到历史
         get().saveToHistory();
-      },
-      
-      copyItem: (id: string) => {
-        set((state) => ({
-          items: state.items.map(item => 
-            item.id === id 
-              ? { ...item, copied: true }
-              : { ...item, copied: false }
-          )
-        }));
-      },
-      
-      resetCopyStatus: (id: string) => {
-        set((state) => ({
-          items: state.items.map(item => 
-            item.id === id 
-              ? { ...item, copied: false }
-              : item
-          )
-        }));
       },
       
       loadFromGist: async () => {

@@ -1,9 +1,9 @@
-import { lazy, useEffect } from 'react';
+import { lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/navigation';
 import AsyncRoute from './components/async-route';
-import { useSettingsStore, useClipboardStore } from './store';
 import { useConfigDetection } from './hooks/use-config-detection';
+import { useAppInitialization } from './hooks/use-app-initialization';
 import DecryptConfigModal from './components/decrypt-config-modal';
 import { useToastStore } from './store/toast-store';
 import ToastContainer from './components/toast-container';
@@ -13,35 +13,11 @@ const ClipboardList = lazy(() => import('./pages/clipboard-list'));
 const Settings = lazy(() => import('./pages/settings'));
 
 function App() {
-  const { loadFromGist } = useClipboardStore();
   const { showDecryptModal, configUrl, closeDecryptModal } = useConfigDetection();
   const { toasts, removeToast } = useToastStore();
   
-  useEffect(() => {
-    const initializeApp = async () => {
-      await Promise.all([
-        useSettingsStore.persist.rehydrate(),
-        useClipboardStore.persist.rehydrate(),
-      ])
-      loadFromGist()
-    }
-
-    const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        // 页面重新可见时，从gist拉取最新数据
-        loadFromGist();
-      }
-    };
-
-    initializeApp()
-    // 监听页面可见性变化
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    // 清理事件监听器
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, [])
+  // 使用全局初始化hook
+  useAppInitialization();
   return (
     <Router>
       <div className="app">
