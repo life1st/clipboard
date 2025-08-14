@@ -474,7 +474,7 @@
         background: rgba(255, 255, 255, 0.8);
         padding: $spacing-md;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.25s ease;
         position: relative;
         border: 1px solid rgba(0, 0, 0, 0.08);
         border-radius: $border-radius-md;
@@ -493,10 +493,16 @@
           }
         }
         
-        // 悬停效果 - 简化
+        // 悬停效果
         &:hover {
           background: rgba(255, 255, 255, 0.95);
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        // 激活状态 - 只改变边框颜色
+        &:active {
+          border-color: $primary-color;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
         }
         
         // 内容区域
@@ -542,14 +548,16 @@
             }
             
             .copy-status {
-              color: $text-secondary;
+              color: $text-muted;
               font-weight: 500;
               font-size: 11px;
               padding: 1px 6px;
               background: rgba(255, 255, 255, 0.7);
               border-radius: 8px;
-              border: 1px solid rgba(0, 0, 0, 0.05);
               transition: all 0.2s ease;
+              &.copied {
+                color: $success-color;
+              }
             }
           }
         }
@@ -559,8 +567,8 @@
           position: absolute;
           top: $spacing-xs;
           right: $spacing-xs;
-          width: 20px;
-          height: 20px;
+          width: 24px;
+          height: 24px;
           padding: 0;
           font-size: 12px;
           border-radius: 3px;
@@ -575,6 +583,7 @@
           line-height: 1;
           cursor: pointer;
           font-family: inherit;
+          z-index: 100;
           
           // 防止事件冒泡和焦点样式
           &:focus {

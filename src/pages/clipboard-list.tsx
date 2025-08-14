@@ -1,10 +1,81 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
+import { debounce } from 'lodash-es';
 import { useClipboardStore, useSettingsStore, usePasteModalStore } from '../store';
 import { useToastStore } from '../store/toast-store';
 import { updateGistFile } from '../request';
 import { Link } from 'react-router-dom';
 import Button from '../components/button';
+import cls from 'classnames'
 import { SORT_OPTIONS, SORT_ORDERS, SORT_LABELS, SORT_ORDER_LABELS, DISPLAY_LIMITS } from '../constants';
+
+// ClipboardItem 组件
+interface ClipboardItemProps {
+  item: any;
+  onDelete: (id: string) => void;
+}
+
+const ClipboardItem: React.FC<ClipboardItemProps> = ({ item, onDelete }) => {
+  const { showError } = useToastStore();
+
+  const [copied, setCopied] = useState(false);
+
+  // 使用防抖重置copied状态
+  const resetCopied = useCallback(
+    debounce(() => setCopied(false), 2000),
+    []
+  );
+
+  const handleCopy = async (content: string) => {
+    try {
+      await navigator.clipboard.writeText(content);
+      // showSuccess('内容已复制到剪贴板');
+      setCopied(true);
+      resetCopied(); // 防抖重置
+    } catch (err) {
+      console.error('Failed to copy to clipboard:', err);
+      showError('复制失败，请检查浏览器权限');
+    }
+  };
+
+  return (
+    <div 
+      className="clipboard-item"
+      onClick={() => handleCopy(item.content)}
+    >
+      <div className="item-content">
+        <div className="content-text">
+          {item.content.length > 100 
+            ? item.content.substring(0, 100) + '...' 
+            : item.content
+          }
+        </div>
+        <div className="item-meta">
+          <span className="timestamp">
+            {new Date(item.timestamp).toLocaleString()}
+          </span>
+          <span className={cls('copy-status', {
+            'copied': copied
+          })}>
+            {copied ? '✅已复制' : '点击复制'}
+          </span>
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete(item.id);
+        }}
+        onMouseDown={(e) => e.stopPropagation()}
+        onFocus={(e) => e.stopPropagation()}
+        title="删除"
+        className="delete-button"
+      >
+        ✕
+      </button>
+    </div>
+  );
+};
 
 const ClipboardList: React.FC = () => {
   const { 
@@ -25,8 +96,6 @@ const ClipboardList: React.FC = () => {
     setSortOrder,
     loadFromGist
   } = useClipboardStore();
-
-  const { showSuccess, showError } = useToastStore();
 
   // 使用 useMemo 计算派生状态
   const totalItems = useMemo(() => clipboardItems.length, [clipboardItems]);
@@ -52,17 +121,6 @@ const ClipboardList: React.FC = () => {
     }
     loadFromGist()
   }
-
-  // 复制内容到剪贴板
-  const copyToClipboard = async (content: string) => {
-    try {
-      await navigator.clipboard.writeText(content);
-      showSuccess('内容已复制到剪贴板');
-    } catch (err) {
-      console.error('Failed to copy to clipboard:', err);
-      showError('复制失败，请检查浏览器权限');
-    }
-  };
 
   // 从剪贴板粘贴内容
   const pasteFromClipboard = async () => {
@@ -158,7 +216,7 @@ const ClipboardList: React.FC = () => {
                 size='sm'
                 className='gist-sync-button'
               >
-                从 Gist 同步
+                {loading ? '同步中...' : '从 Gist 同步'}
               </Button>
             </div>
             <div className="sync-info">
@@ -263,41 +321,11 @@ const ClipboardList: React.FC = () => {
           ) : (
             <div className="clipboard-list">
               {clipboardItems.map((item: any) => (
-                <div 
-                  key={item.id} 
-                  className="clipboard-item"
-                  onClick={() => copyToClipboard(item.content)}
-                >
-                  <div className="item-content">
-                    <div className="content-text">
-                      {item.content.length > 100 
-                        ? item.content.substring(0, 100) + '...' 
-                        : item.content
-                      }
-                    </div>
-                    <div className="item-meta">
-                      <span className="timestamp">
-                        {new Date(item.timestamp).toLocaleString()}
-                      </span>
-                      <span className="copy-status">
-                        点击复制
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteItem(item.id);
-                    }}
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onFocus={(e) => e.stopPropagation()}
-                    title="删除"
-                    className="delete-button"
-                  >
-                    ✕
-                  </button>
-                </div>
+                <ClipboardItem
+                  key={item.id}
+                  item={item}
+                  onDelete={deleteItem}
+                />
               ))}
             </div>
           )}
