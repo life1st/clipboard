@@ -19,6 +19,7 @@ module.exports = {
       }
     ],
     'no-unused-vars': 'off', // 关闭基础规则，使用 TypeScript 版本
+    'no-redeclare': 'off', // 关闭重复声明检查，因为我们的 ClipboardItem 与内置类型不同
   },
   overrides: [
     {

@@ -5,6 +5,22 @@
 @use '../variables' as *;
 @use '../mixins' as *;
 
+// 动画定义
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%, 43% {
+    transform: translate3d(0, -8px, 0);
+  }
+  70% {
+    transform: translate3d(0, -4px, 0);
+  }
+  90% {
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -214,6 +230,78 @@
       
       button {
         flex: 1;
+      }
+    }
+    
+    // 解密成功后的样式
+    .decrypt-success {
+      text-align: center;
+      margin-bottom: 24px;
+      
+      .success-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+        animation: bounce 0.6s ease-out;
+      }
+      
+      h3 {
+        margin: 0 0 8px 0;
+        font-size: 20px;
+        font-weight: 600;
+        color: #059669;
+      }
+      
+      p {
+        margin: 0;
+        color: #6b7280;
+        font-size: 14px;
+      }
+    }
+    
+    .config-preview {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      
+      .config-item {
+        margin-bottom: 16px;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+        
+        label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: 600;
+          color: #374151;
+          font-size: 14px;
+        }
+        
+        .token-preview,
+        .gist-preview {
+          background: white;
+          border: 1px solid #d1d5db;
+          border-radius: 8px;
+          padding: 12px 16px;
+          font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+          font-size: 13px;
+          color: #374151;
+          word-break: break-all;
+          line-height: 1.4;
+        }
+        
+        .token-preview {
+          color: #059669;
+          font-weight: 500;
+        }
+        
+        .gist-preview {
+          color: #7c3aed;
+          font-weight: 500;
+        }
       }
     }
   }
