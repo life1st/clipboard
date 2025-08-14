@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { debounce } from 'lodash-es';
-import { useClipboardStore, useSettingsStore } from '../store';
+import { useClipboardStore, useSettingsStore, usePasteModalStore } from '../store';
 
 export const useAppInitialization = () => {
-
-  const { loadFromGist } = useClipboardStore();
+  const { loadFromGist, items } = useClipboardStore();
+  const { openModal } = usePasteModalStore();
   const lastClipboardContent = useRef<string>('');
 
   // 使用 useCallback 和 debounce 来避免重复触发
@@ -17,18 +17,22 @@ export const useAppInitialization = () => {
     // 页面重新获得焦点时，从gist拉取最新数据
     loadFromGist();
 
-    // 检测剪贴板内容变化
-    if (navigator.clipboard && navigator.clipboard.readText) {
-      try {
-        const content = await navigator.clipboard.readText()
-        console.log(content, 'content detecting')
-        if (content && content !== lastClipboardContent.current) {
-          lastClipboardContent.current = content;
-        }
-      } catch (err) {
-        console.warn('无法读取剪贴板内容:', err);
-      }
-    }
+         // 检测剪贴板内容变化
+     if (navigator.clipboard && navigator.clipboard.readText) {
+       try {
+         const content = await navigator.clipboard.readText()
+         if (content && content !== lastClipboardContent.current) {
+           // 检查是否与列表中的内容重复
+           const isDuplicate = items.some(item => item.content === content);
+           if (!isDuplicate) {
+             lastClipboardContent.current = content;
+             openModal(content);
+           }
+         }
+       } catch (err) {
+         console.warn('无法读取剪贴板内容:', err);
+       }
+     }
   }, 300)
 
   useEffect(() => {
@@ -61,8 +65,4 @@ export const useAppInitialization = () => {
       throttledHandleFocus.cancel();
     };
   }, []);
-
-  return {
-    lastClipboardContent: lastClipboardContent.current
-  };
 }; 

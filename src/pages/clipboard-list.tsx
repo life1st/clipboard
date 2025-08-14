@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useClipboardStore, useSettingsStore } from '../store';
+import { useClipboardStore, useSettingsStore, usePasteModalStore } from '../store';
 import { useToastStore } from '../store/toast-store';
 import { updateGistFile } from '../request';
 import { Link } from 'react-router-dom';
@@ -37,9 +37,7 @@ const ClipboardList: React.FC = () => {
     githubToken
   } = useSettingsStore();
 
-  // 本地状态
-  const [showPasteModal, setShowPasteModal] = useState(false);
-  const [pasteContent, setPasteContent] = useState('');
+  const { isOpen: showPasteModal, content: pasteContent, openModal: openPasteModal, closeModal: closePasteModal, setContent } = usePasteModalStore();
   const [isSettingsCollapsed, setIsSettingsCollapsed] = useState(true); // 显示设置折叠状态，默认折叠
 
   // 检查是否已配置
@@ -70,8 +68,7 @@ const ClipboardList: React.FC = () => {
   const pasteFromClipboard = async () => {
     try {
       const content = await navigator.clipboard.readText();
-      setPasteContent(content);
-      setShowPasteModal(true);
+      openPasteModal(content);
     } catch (err) {
       console.error('Failed to read from clipboard:', err);
       setError('读取剪贴板失败，请检查浏览器权限');
@@ -85,8 +82,7 @@ const ClipboardList: React.FC = () => {
     try {
       // 添加项目到本地状态
       addItem(pasteContent.trim());
-      setPasteContent('');
-      setShowPasteModal(false);
+      closePasteModal();
       
       // 如果配置了 Gist，自动保存到 Gist
       if (isConfigured) {
@@ -125,10 +121,6 @@ const ClipboardList: React.FC = () => {
       clearAll();
     }
   };
-
-
-
-
 
   return (
     <div className="clipboard-list-page">
@@ -324,14 +316,14 @@ const ClipboardList: React.FC = () => {
 
         {/* 粘贴模态框 */}
         {showPasteModal && (
-          <div className="modal-overlay" onClick={() => setShowPasteModal(false)}>
+          <div className="modal-overlay" onClick={closePasteModal}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <h3>添加剪贴板项目</h3>
               <div className="input-group">
                 <label>内容:</label>
                 <textarea 
                   value={pasteContent} 
-                  onChange={(e) => setPasteContent(e.target.value)}
+                  onChange={(e) => setContent(e.target.value)}
                   placeholder="粘贴或输入内容"
                   rows={6}
                 />
@@ -364,7 +356,7 @@ const ClipboardList: React.FC = () => {
                 </Button>
                 <Button 
                   variant="ghost"
-                  onClick={() => setShowPasteModal(false)}
+                  onClick={closePasteModal}
                   fullWidth
                 >
                   取消
