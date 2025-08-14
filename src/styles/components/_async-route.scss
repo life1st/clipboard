@@ -17,23 +17,25 @@
     text-align: center;
     
     .error-icon {
-      font-size: 2.5rem;
+      font-size: 40px;
       color: $primary-color;
       margin-bottom: $spacing-sm;
     }
     
     .error-title {
-      color: $text-primary;
-      font-size: $font-size-lg;
+      font-size: 48px;
       font-weight: 600;
-      margin-bottom: $spacing-xs;
+      color: #e53e3e;
+      text-align: center;
+      margin-bottom: 16px;
     }
     
     .error-message {
-      color: $text-secondary;
-      font-size: $font-size-sm;
-      margin-bottom: $spacing-md;
-      max-width: 450px;
+      font-size: 56px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.7);
+      text-align: center;
+      margin-bottom: 32px;
     }
     
     .error-actions {
@@ -49,7 +51,7 @@
       padding: $spacing-xl;
       
       .error-icon {
-        font-size: 3rem;
+        font-size: 48px;
       }
       
       .error-title {
@@ -67,7 +69,7 @@
       min-height: 350px;
       
       .error-icon {
-        font-size: 3.5rem;
+        font-size: 56px;
       }
       
       .error-title {

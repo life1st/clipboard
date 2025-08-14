@@ -8,10 +8,11 @@
   justify-content: center;
   font-family: inherit;
   font-weight: 500;
+  line-height: 1;
   text-decoration: none;
   cursor: pointer;
   border: none;
-  border-radius: 0.375rem;
+  border-radius: 6px;
   transition: all 0.2s ease;
   user-select: none;
   position: relative;
@@ -29,21 +30,21 @@
   
   // 尺寸变体
   &--sm {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-    min-height: 2rem;
+    padding: 4px 8px;
+    font-size: $font-size-sm;
+    min-height: 32px;
   }
   
   &--md {
-    padding: 0.375rem 0.75rem;
-    font-size: 0.875rem;
-    min-height: 2.5rem;
+    padding: 6px 12px;
+    font-size: $font-size-base;
+    min-height: 40px;
   }
   
   &--lg {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    min-height: 3rem;
+    padding: 8px 16px;
+    font-size: $font-size-lg;
+    min-height: 48px;
   }
   
   // 宽度变体
@@ -130,9 +131,9 @@
   
   // 加载图标
   &__loading-icon {
-    width: 1rem;
-    height: 1rem;
-    margin-right: 0.5rem;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
     animation: spin 1s linear infinite;
   }
   

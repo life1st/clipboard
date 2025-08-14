@@ -3,13 +3,20 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/navigation';
 import AsyncRoute from './components/async-route';
 import { useSettingsStore, useClipboardStore } from './store';
+import { useConfigDetection } from './hooks/use-config-detection';
+import DecryptConfigModal from './components/decrypt-config-modal';
+import { useToastStore } from './store/toast-store';
+import ToastContainer from './components/toast-container';
 
 // 使用 dynamic import 进行代码拆分
 const ClipboardList = lazy(() => import('./pages/clipboard-list'));
 const Settings = lazy(() => import('./pages/settings'));
 
 function App() {
-  const { loadFromGist } = useClipboardStore()
+  const { loadFromGist } = useClipboardStore();
+  const { showDecryptModal, configUrl, closeDecryptModal } = useConfigDetection();
+  const { toasts, removeToast } = useToastStore();
+  
   useEffect(() => {
     const initializeApp = async () => {
       await Promise.all([
@@ -62,6 +69,16 @@ function App() {
         <footer className="app-footer">
           <p>使用 GitHub Gist API 管理你的代码片段</p>
         </footer>
+        
+        {/* 配置解密 Modal */}
+        <DecryptConfigModal
+          isOpen={showDecryptModal}
+          onClose={closeDecryptModal}
+          configUrl={configUrl}
+        />
+        
+        {/* Toast 通知 */}
+        <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
       </div>
     </Router>
   );
