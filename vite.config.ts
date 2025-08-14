@@ -1,6 +1,16 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import { readFileSync } from 'fs'
+import { resolve, dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+// 获取当前文件的目录路径
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
+// 读取package.json获取版本信息
+const packageJson = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8'))
+const appVersion = packageJson.version
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,6 +20,10 @@ export default defineConfig({
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        // 添加版本检测
+        additionalManifestEntries: [
+          { url: '/version.json', revision: appVersion }
+        ],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/api\.github\.com\/.*/i,
@@ -28,6 +42,7 @@ export default defineConfig({
         name: 'Clipboard',
         short_name: 'Clipboard',
         description: 'A modern clipboard management application with Gist sync',
+        version: appVersion,
         theme_color: '#1a1a1a',
         background_color: '#ffffff',
         display: 'standalone',
