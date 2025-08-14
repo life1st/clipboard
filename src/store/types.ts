@@ -1,5 +1,5 @@
 // 剪贴板项目类型
-export interface ClipboardItem {
+export interface AppClipboardItem {
   id: string;
   content: string;
   timestamp: string;

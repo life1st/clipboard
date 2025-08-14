@@ -119,8 +119,7 @@
         transition: all 0.3s ease;
         transform: translateX(-50%);
       }
-      
-      &:hover::before {
+      &.active::before {
         width: 100%;
       }
     }

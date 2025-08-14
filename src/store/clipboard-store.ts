@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { ClipboardItem } from './types';
+import { AppClipboardItem } from './types';
 import { 
   DISPLAY_LIMITS, 
   HISTORY_LIMITS, 
@@ -13,7 +13,7 @@ import { useSettingsStore } from './settings-store';
 
 interface ClipboardState {
   // 核心数据
-  items: ClipboardItem[];
+  items: AppClipboardItem[];
   
   // 应用状态
   loading: boolean;
@@ -26,7 +26,7 @@ interface ClipboardState {
   sortOrder: SortOrder; // 排序顺序
   
   // 历史数据管理
-  history: ClipboardItem[][]; // 历史版本数组
+  history: AppClipboardItem[][]; // 历史版本数组
   maxHistorySize: number; // 最大历史版本数
   currentHistoryIndex: number; // 当前历史版本索引
   
@@ -73,7 +73,7 @@ export const useClipboardStore = create<ClipboardState>()(
       
       // Actions
       addItem: (content: string) => {
-        const newItem: ClipboardItem = {
+        const newItem: AppClipboardItem = {
           id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
           content: content.trim(),
           timestamp: new Date().toISOString(),

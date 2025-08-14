@@ -9,6 +9,16 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   rules: {
     // 基础规则
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        ignoreRestSiblings: true,
+        args: 'none' // 忽略函数参数
+      }
+    ],
+    'no-unused-vars': 'off', // 关闭基础规则，使用 TypeScript 版本
   },
   overrides: [
     {

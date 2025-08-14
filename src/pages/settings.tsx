@@ -1,10 +1,11 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSettingsStore } from '../store';
 import { getGist, updateGistFile } from '../request';
 import Button from '../components/button';
 import Input from '../components/input';
 import HistoryManager from '../components/history-manager';
 import QRCodeComponent from '../components/qr-code';
+import GitHubConfig from '../components/github-config';
 import { generateSyncUrl, getCurrentHost } from '../utils/sync-utils';
 import { useToastStore } from '../store/toast-store';
 
@@ -15,9 +16,6 @@ const Settings: React.FC = () => {
     gistId,
     autoSync,
     syncInterval,
-    setToken,
-    setGistId,
-    removeToken,
     setAutoSync,
     setSyncInterval,
     resetSettings
@@ -27,55 +25,23 @@ const Settings: React.FC = () => {
   // 本地状态
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [token, setLocalToken] = useState('');
   const [result, setResult] = useState('');
   const [salt, setSalt] = useState('');
   const [encryptedSyncUrl, setEncryptedSyncUrl] = useState('');
+  const [isConfigured, setIsConfigured] = useState(false);
 
-  // 本地计算属性
-  const tokenStatus = useMemo(() => {
-    if (githubToken) {
-      return '✅ Token 已设置';
-    }
-    return '❌ Token 未设置';
-  }, [githubToken]);
-
-  // 计算是否已配置
-  const isConfigured = useMemo(() => {
-    return !!(githubToken && gistId);
-  }, [githubToken, gistId]);
-
-
-
-  // 初始化本地状态
-  useEffect(() => {
-    if (githubToken) {
-      setLocalToken(githubToken);
-    }
-  }, [githubToken]);
-
-  const handleSaveToken = () => {
-    if (token.trim()) {
-      setToken(token.trim());
-      showSuccess('Token 已保存');
-      setLocalToken(''); // 清空输入框
-    } else {
-      showError('Token 不能为空');
-    }
+  // 配置状态变化处理
+  const handleConfigChange = (configured: boolean) => {
+    setIsConfigured(configured);
   };
 
-  const handleRemoveToken = () => {
-    removeToken();
-    setLocalToken('');
-  };
 
-  const handleClearToken = () => {
-    setLocalToken('');
-  };
+
+
 
   const handleTestGist = async () => {
     if (!isConfigured) {
-      showError('请先设置 Gist ID 和 Token');
+      showError('请先完成 GitHub 配置');
       return;
     }
     
@@ -97,7 +63,7 @@ const Settings: React.FC = () => {
 
   const handleCreateClipboardFile = async () => {
     if (!isConfigured) {
-      showError('请先设置 Gist ID 和 Token');
+      showError('请先完成 Gist ID 和 Token 配置');
       return;
     }
     
@@ -127,7 +93,7 @@ const Settings: React.FC = () => {
 
   const handleGenerateEncryptedUrl = () => {
     if (!isConfigured) {
-      showError('请先完成配置以生成同步链接');
+      showError('请先完成 GitHub 配置以生成同步链接');
       return;
     }
 
@@ -178,92 +144,14 @@ const Settings: React.FC = () => {
         </div>
         
         <div className="settings-section">
-          <h3>GitHub Token 配置</h3>
-          <p className="token-info">
-            要使用 GitHub Gist API，你需要设置 Personal Access Token。
-            <br />
-            <a 
-              href="https://github.com/settings/tokens" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="token-link"
-            >
-              点击这里创建 Token
-            </a>
-          </p>
-          
-          <div className="input-group">
-            <label htmlFor="github-token">GitHub Token:</label>
-            <div className="input-with-button">
-              <Input 
-                type="password" 
-                name="github-token"
-                value={token} 
-                onChange={(e) => setLocalToken(e.target.value)}
-                placeholder={githubToken ? 'Token 已设置（输入新值覆盖）' : '输入你的 GitHub Token'}
-                size="sm"
-              />
-              <Button 
-                variant="ghost"
-                onClick={handleClearToken}
-                size="sm"
-              >
-                清空
-              </Button>
-            </div>
-          </div>
-          
-          <div className="token-status">
-            <span className={`status ${tokenStatus.includes('✅') ? 'success' : 'error'}`}>
-              {tokenStatus}
-            </span>
-            {githubToken && (
-              <div className="token-info-display">
-                <span className="token-preview">
-                  Token: {githubToken.substring(0, 8)}...{githubToken.substring(githubToken.length - 4)}
-                </span>
-              </div>
-            )}
-          </div>
-          
-          <div className="button-group">
-            <Button 
-              variant="primary"
-              onClick={handleSaveToken}
-              fullWidth
-            >
-              保存 Token
-            </Button>
-            
-            <Button 
-              variant="danger"
-              onClick={handleRemoveToken}
-              fullWidth
-            >
-              删除 Token
-            </Button>
-          </div>
+          <GitHubConfig onConfigChange={handleConfigChange} />
         </div>
 
         <div className="settings-section">
-          <h3>Gist 配置</h3>
+          <h3>Gist 操作</h3>
           <p className="gist-info">
-            设置你的 GitHub Gist ID，剪贴板数据将同步到这个 Gist 中。
-            <br />
-            文件名将自动设置为 <code>clipboard.json</code>
+            在完成 GitHub 配置后，你可以测试连接和创建剪贴板文件。
           </p>
-          
-          <div className="input-group">
-            <label>Gist ID:</label>
-            <Input 
-              type="text" 
-              name="gist-id"
-              value={gistId} 
-              onChange={(e) => setGistId(e.target.value)}
-              placeholder="输入你的 Gist ID"
-              size="md"
-            />
-          </div>
           
           <div className="button-group">
             <Button 
@@ -287,6 +175,14 @@ const Settings: React.FC = () => {
             </Button>
           </div>
         </div>
+
+        {/* 结果显示 */}
+        {result && (
+          <div className="settings-section">
+            <h3>操作结果</h3>
+            <pre className="result-display">{result}</pre>
+          </div>
+        )}
 
         <div className="settings-section">
           <h3>应用设置</h3>
@@ -414,28 +310,17 @@ const Settings: React.FC = () => {
           </div>
         )}
         
-        {/* 结果显示 */}
-        {result && (
-          <div className="settings-section">
-            <h3>操作结果</h3>
-            <pre className="result-display">{result}</pre>
-          </div>
-        )}
-        
         <HistoryManager />
 
         <div className="settings-section">
           <h3>使用说明</h3>
           <div className="instructions">
             <ol>
-              <li>访问 <a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer">GitHub Token 设置页面</a></li>
-              <li>点击 "Generate new token (classic)"</li>
-              <li>选择 "gist" 权限</li>
-              <li>生成并复制 Token</li>
-              <li>粘贴到上面的输入框中并保存</li>
-              <li>创建一个新的 Gist 或使用现有的 Gist ID</li>
-              <li>点击"测试 Gist 连接"验证配置</li>
-              <li>点击"创建剪贴板文件"初始化数据结构</li>
+              <li>在 GitHub 配置区域输入你的 Token 和 Gist ID</li>
+              <li>点击"保存配置并测试连通性"自动验证配置</li>
+              <li>配置成功后，可以测试 Gist 连接和创建剪贴板文件</li>
+              <li>如需获取 Token，访问 <a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer">GitHub Token 设置页面</a></li>
+              <li>选择 "gist" 权限生成 Token</li>
             </ol>
           </div>
         </div>
