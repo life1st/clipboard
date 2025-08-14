@@ -1,4 +1,6 @@
 import React, { forwardRef } from 'react';
+import classNames from 'classnames';
+import Button from './button';
 
 export interface InputProps {
   type?: 'text' | 'password' | 'email' | 'number' | 'url' | 'tel';
@@ -19,6 +21,7 @@ export interface InputProps {
   max?: number;
   step?: number;
   pattern?: string;
+  clear?: boolean;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(({
@@ -40,38 +43,72 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
   max,
   step,
   pattern,
+  clear = false,
   ...props
 }, ref) => {
-  const inputClasses = [
+  const inputClasses = classNames(
     'input',
     `input--${size}`,
-    fullWidth ? 'input--full-width' : '',
-    disabled ? 'input--disabled' : '',
-    readOnly ? 'input--readonly' : '',
+    {
+      'input--full-width': fullWidth,
+      'input--disabled': disabled,
+      'input--readonly': readOnly
+    },
     className
-  ].filter(Boolean).join(' ');
+  );
+
+  const containerClasses = classNames(
+    'input-container',
+    {
+      'input-container--with-clear': clear
+    }
+  );
+
+  const handleClear = () => {
+    if (onChange) {
+      const event = {
+        target: { value: '' }
+      } as React.ChangeEvent<HTMLInputElement>;
+      onChange(event);
+    }
+  };
+
+  const hasValue = value && String(value).trim() !== '';
 
   return (
-    <input
-      ref={ref}
-      type={type}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      disabled={disabled}
-      readOnly={readOnly}
-      required={required}
-      name={name}
-      id={id}
-      className={inputClasses}
-      autoFocus={autoFocus}
-      maxLength={maxLength}
-      min={min}
-      max={max}
-      step={step}
-      pattern={pattern}
-      {...props}
-    />
+    <div className={containerClasses}>
+      <input
+        ref={ref}
+        type={type}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        disabled={disabled}
+        readOnly={readOnly}
+        required={required}
+        name={name}
+        id={id}
+        className={inputClasses}
+        autoFocus={autoFocus}
+        maxLength={maxLength}
+        min={min}
+        max={max}
+        step={step}
+        pattern={pattern}
+        {...props}
+      />
+      {clear && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleClear}
+          disabled={disabled || !hasValue}
+          className="input-clear"
+        >
+          清空
+        </Button>
+      )}
+    </div>
   );
 });
 

@@ -50,9 +50,9 @@ const Settings: React.FC = () => {
     try {
       const gist = await getGist(gistId);
       showSuccess('Gist 连接成功！');
-      setResult(`Gist 连接成功！\n${JSON.stringify(gist, null, 2)}`);
+      setResult(`✅ Gist 连接成功！\n${JSON.stringify(gist, null, 2)}`);
     } catch (error: any) {
-      const errorMessage = `Gist 连接失败: ${error.message}`;
+      const errorMessage = `❌ Gist 连接失败: ${error.message}`;
       showError(errorMessage);
       setResult(errorMessage);
       setError(errorMessage);

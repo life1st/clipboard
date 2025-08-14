@@ -1,11 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { debounce } from 'lodash-es';
 import { useClipboardStore, useSettingsStore, usePasteModalStore } from '../store';
 
 export const useAppInitialization = () => {
   const { loadFromGist, items } = useClipboardStore();
-  const { openModal } = usePasteModalStore();
-  const lastClipboardContent = useRef<string>('');
+  const { openModal, lastClipboardContent, setLastClipboardContent } = usePasteModalStore();
 
   // 使用 useCallback 和 debounce 来避免重复触发
   const throttledHandleFocus = debounce(async () => {
@@ -21,11 +20,11 @@ export const useAppInitialization = () => {
      if (navigator.clipboard && navigator.clipboard.readText) {
        try {
          const content = await navigator.clipboard.readText()
-         if (content && content !== lastClipboardContent.current) {
+         if (content && content !== lastClipboardContent) {
            // 检查是否与列表中的内容重复
            const isDuplicate = items.some(item => item.content === content);
            if (!isDuplicate) {
-             lastClipboardContent.current = content;
+             setLastClipboardContent(content);
              openModal(content);
            }
          }

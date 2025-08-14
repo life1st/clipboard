@@ -185,6 +185,23 @@ $input-responsive-sizes: (
   }
 }
 
+// 输入框容器样式
+.input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  
+  .input {
+    flex: 1;
+  }
+}
+
+// 清空按钮样式
+.input-clear {
+  flex-shrink: 0;
+}
+
 // 响应式设计
 @media (max-width: 640px) {
   .input {
@@ -199,5 +216,15 @@ $input-responsive-sizes: (
     &--lg {
       @include input-size('lg', true);
     }
+  }
+  
+  .input-container {
+    gap: 12px;
+  }
+  
+  .input-clear {
+    min-width: 32px;
+    height: 32px;
+    font-size: 16px;
   }
 } 

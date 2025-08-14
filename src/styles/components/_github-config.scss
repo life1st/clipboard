@@ -5,20 +5,31 @@
   border: 1px solid var(--border-color);
   
   .config-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
     margin-bottom: var(--spacing-lg);
     
-    h3 {
-      margin: 0 0 var(--spacing-sm) 0;
-      color: var(--text-primary);
-      font-size: var(--font-size-lg);
-      font-weight: 600;
+    .header-content {
+      flex: 1;
+      
+      h3 {
+        margin: 0 0 var(--spacing-sm) 0;
+        color: var(--text-primary);
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+      }
+      
+      .config-description {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: var(--font-size-sm);
+        line-height: 1.5;
+      }
     }
     
-    .config-description {
-      margin: 0;
-      color: var(--text-secondary);
-      font-size: var(--font-size-sm);
-      line-height: 1.5;
+    .header-actions {
+      margin-left: var(--spacing-md);
     }
   }
   
@@ -33,6 +44,8 @@
         font-weight: 500;
         font-size: var(--font-size-sm);
       }
+      
+
       
       .input-help {
         margin-top: var(--spacing-xs);
@@ -111,23 +124,9 @@
     }
     
     .config-actions {
-      .primary-actions {
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-sm);
-        margin-bottom: var(--spacing-md);
-      }
-      
-      .secondary-actions {
-        display: flex;
-        gap: var(--spacing-sm);
-        justify-content: center;
-        
-        .button {
-          flex: 1;
-          max-width: 120px;
-        }
-      }
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
     }
   }
 }
@@ -137,16 +136,15 @@
   .github-config {
     padding: var(--spacing-md);
     
-    .config-form {
-      .config-actions {
-        .secondary-actions {
-          flex-direction: column;
-          
-          .button {
-            max-width: none;
-          }
-        }
+    .config-header {
+      flex-direction: column;
+      gap: var(--spacing-sm);
+      
+      .header-actions {
+        margin-left: 0;
+        align-self: flex-end;
       }
     }
+    
   }
 } 
