@@ -1,7 +1,7 @@
 {
   "name": "clipboard-web",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.4.4",
   "type": "module",
   "engines": {
     "node": ">=22.0.0"
@@ -9,11 +9,11 @@
   "packageManager": "pnpm@10.2.0+sha1.5d36c5a1aae9a628a924ee9982f013ad202e1051",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "node scripts/update-version.js && tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "prepare": "husky",
-    "version:update": "node scripts/update-version.js"
+    "version:increment": "node scripts/increment-version.js"
   },
   "dependencies": {
     "axios": "1.11.0",
