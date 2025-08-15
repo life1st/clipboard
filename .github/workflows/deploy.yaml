@@ -42,7 +42,7 @@ jobs:
       shell: bash
     - run: git config --global user.name "deployer"
       shell: bash
-    - run: git commit -m 'deploy files'
+    - run: git commit -m 'deploy files' --no-verify
       shell: bash
     - run: git push origin HEAD:gh-pages --force
       shell: bash
