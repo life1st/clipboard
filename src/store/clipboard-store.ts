@@ -129,7 +129,7 @@ export const useClipboardStore = create<ClipboardState>()(
                   // 如果是旧的数据结构（直接是数组）
                   items.push(...fileContent)
                 }
-              } catch (e) {
+              } catch {
                 // 如果文件内容不是 JSON 格式，跳过
               }
             })

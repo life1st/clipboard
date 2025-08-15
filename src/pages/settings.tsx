@@ -126,7 +126,7 @@ const Settings: React.FC = () => {
     try {
       await navigator.clipboard.writeText(encryptedSyncUrl);
       showSuccess('同步链接已复制到剪贴板');
-    } catch (error) {
+    } catch {
       showError('复制失败，请手动复制链接');
     }
   };
