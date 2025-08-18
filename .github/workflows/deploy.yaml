@@ -34,8 +34,6 @@ jobs:
       shell: bash
     - run: mv ./dist/* ./
       shell: bash
-    # - run: echo "mileage.life1st.me" > CNAME
-    #   shell: bash
     - run: git add .
       shell: bash
     - run: git config --global user.email "deployer@life1st.me"

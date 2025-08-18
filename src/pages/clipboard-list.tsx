@@ -2,16 +2,16 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { debounce } from 'lodash-es';
 import { useClipboardStore, useSettingsStore, usePasteModalStore } from '../store';
 import { useToastStore } from '../store/toast-store';
-import { updateGistFile } from '../request';
 import { Link } from 'react-router-dom';
 import Button from '../components/button';
+import PasteModal from '../components/paste-modal';
 import cls from 'classnames'
 import { SORT_OPTIONS, SORT_ORDERS, SORT_LABELS, SORT_ORDER_LABELS, DISPLAY_LIMITS } from '../constants';
 
 // ClipboardItem 组件
 interface ClipboardItemProps {
   item: any;
-  onDelete: (id: string) => void;
+  onDelete: (id: string) => Promise<void>;
 }
 
 const ClipboardItem: React.FC<ClipboardItemProps> = ({ item, onDelete }) => {
@@ -62,9 +62,14 @@ const ClipboardItem: React.FC<ClipboardItemProps> = ({ item, onDelete }) => {
       </div>
       <button
         type="button"
-        onClick={(e) => {
+        onClick={async (e) => {
           e.stopPropagation();
-          onDelete(item.id);
+          try {
+            await onDelete(item.id);
+          } catch (error: any) {
+            console.error('Delete item failed:', error);
+            showError(`删除失败: ${error.message}`);
+          }
         }}
         onMouseDown={(e) => e.stopPropagation()}
         onFocus={(e) => e.stopPropagation()}
@@ -86,16 +91,16 @@ const ClipboardList: React.FC = () => {
     maxItems,
     sortBy,
     sortOrder,
-    addItem,
     deleteItem,
     clearAll,
-    setLoading,
     setError,
     setMaxItems,
     setSortBy,
     setSortOrder,
     loadFromGist
   } = useClipboardStore();
+
+  const { showError } = useToastStore();
 
   // 使用 useMemo 计算派生状态
   const totalItems = useMemo(() => clipboardItems.length, [clipboardItems]);
@@ -106,7 +111,7 @@ const ClipboardList: React.FC = () => {
     githubToken
   } = useSettingsStore();
 
-  const { isOpen: showPasteModal, content: pasteContent, openModal: openPasteModal, closeModal: closePasteModal, setContent } = usePasteModalStore();
+  const { openModal: openPasteModal } = usePasteModalStore();
   const [isSettingsCollapsed, setIsSettingsCollapsed] = useState(true); // 显示设置折叠状态，默认折叠
 
   // 检查是否已配置
@@ -123,60 +128,26 @@ const ClipboardList: React.FC = () => {
   }
 
   // 从剪贴板粘贴内容
-  const pasteFromClipboard = async () => {
-    try {
-      const content = await navigator.clipboard.readText();
+  const pasteFromClipboard = () => {
+    navigator.clipboard.readText().then(content => {
       openPasteModal(content);
-    } catch (err) {
+    }).catch(err => {
       console.error('Failed to read from clipboard:', err);
       setError('读取剪贴板失败，请检查浏览器权限');
-    }
+    });
   };
 
-  // 添加新项目
-  const addNewItem = async () => {
-    if (!pasteContent.trim()) return;
-    
-    try {
-      // 添加项目到本地状态
-      addItem(pasteContent.trim());
-      closePasteModal();
-      
-      // 如果配置了 Gist，自动保存到 Gist
-      if (isConfigured) {
-        setLoading(true);
-        setError('');
-        
-        try {
-          // 获取最新的项目列表（包括刚添加的项目）
-          const { items } = useClipboardStore.getState();
-          const content = JSON.stringify({
-            items: items,
-            lastUpdated: new Date().toISOString()
-          }, null, 2);
-          
-          // 更新 Gist 中的 clipboard.json 文件
-          await updateGistFile(gistId, 'clipboard.json', content, 'Updated clipboard data');
-          
-          // 显示成功消息
-          setError('✅ 项目已添加并同步到 Gist');
-          setTimeout(() => setError(''), 3000);
-          
-        } catch (err: any) {
-          setError(`❌ 同步到 Gist 失败: ${err.message}`);
-        } finally {
-          setLoading(false);
-        }
-      }
-    } catch (err: any) {
-      setError(`❌ 添加项目失败: ${err.message}`);
-    }
-  };
+
 
   // 清空所有项目
-  const handleClearAll = () => {
+  const handleClearAll = async () => {
     if (window.confirm('确定要清空所有项目吗？')) {
-      clearAll();
+      try {
+        await clearAll();
+      } catch (error: any) {
+        console.error('Clear all failed:', error);
+        showError(`清空失败: ${error.message}`);
+      }
     }
   };
 
@@ -342,57 +313,8 @@ const ClipboardList: React.FC = () => {
           Paste
         </Button>
 
-        {/* 粘贴模态框 */}
-        {showPasteModal && (
-          <div className="modal-overlay" onClick={closePasteModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <h3>添加剪贴板项目</h3>
-              <div className="input-group">
-                <label>内容:</label>
-                <textarea 
-                  value={pasteContent} 
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="粘贴或输入内容"
-                  rows={6}
-                />
-              </div>
-              
-              {isConfigured && (
-                <div className="input-group">
-                  <label>
-                    <input 
-                      type="checkbox" 
-                      checked={true}
-                      disabled={true}
-                    />
-                    自动同步到 Gist (clipboard.json)
-                  </label>
-                  <small className="help-text">
-                    项目添加后将自动更新到 Gist 中的 clipboard.json 文件
-                  </small>
-                </div>
-              )}
-              
-              <div className="modal-actions">
-                <Button 
-                  variant="primary"
-                  onClick={addNewItem}
-                  disabled={!pasteContent.trim()}
-                  fullWidth
-                >
-                  添加
-                </Button>
-                <Button 
-                  variant="ghost"
-                  onClick={closePasteModal}
-                  fullWidth
-                >
-                  取消
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* 粘贴模态框组件 */}
+        <PasteModal />
 
 
       </div>

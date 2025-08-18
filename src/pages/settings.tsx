@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSettingsStore } from '../store';
 import { getGist, updateGistFile } from '../request';
 import Button from '../components/button';
@@ -8,6 +8,7 @@ import QRCodeComponent from '../components/qr-code';
 import GitHubConfig from '../components/github-config';
 import { generateSyncUrl, getCurrentHost } from '../utils/sync-utils';
 import { useToastStore } from '../store/toast-store';
+import { getVersionInfo, formatBuildInfo, formatGitHash, type VersionInfo } from '../utils/version-utils';
 
 const Settings: React.FC = () => {
   // 使用 store 中的状态
@@ -29,11 +30,26 @@ const Settings: React.FC = () => {
   const [salt, setSalt] = useState('');
   const [encryptedSyncUrl, setEncryptedSyncUrl] = useState('');
   const [isConfigured, setIsConfigured] = useState(false);
+  const [versionInfo, setVersionInfo] = useState<VersionInfo | null>(null);
 
   // 配置状态变化处理
   const handleConfigChange = (configured: boolean) => {
     setIsConfigured(configured);
   };
+
+  // 获取版本信息
+  useEffect(() => {
+    const loadVersionInfo = async () => {
+      try {
+        const info = await getVersionInfo();
+        setVersionInfo(info);
+      } catch (error) {
+        console.warn('无法获取版本信息:', error);
+      }
+    };
+
+    loadVersionInfo();
+  }, []);
 
 
 
@@ -324,6 +340,31 @@ const Settings: React.FC = () => {
             </ol>
           </div>
         </div>
+
+        {/* 版本信息 */}
+        {versionInfo && (
+          <div className="settings-section version-info">
+            <h3>版本信息</h3>
+            <div className="version-details">
+              <div className="version-item">
+                <span className="version-label">应用版本：</span>
+                <span className="version-value">{versionInfo.version}</span>
+              </div>
+              <div className="version-item">
+                <span className="version-label">包版本：</span>
+                <span className="version-value">{versionInfo.packageVersion}</span>
+              </div>
+              <div className="version-item">
+                <span className="version-label">构建时间：</span>
+                <span className="version-value">{formatBuildInfo(versionInfo.buildInfo)}</span>
+              </div>
+              <div className="version-item">
+                <span className="version-label">Git hash：</span>
+                <span className="version-value version-hash">{formatGitHash(versionInfo.hash)}</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

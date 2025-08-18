@@ -8,7 +8,7 @@ import {
   type SortBy,
   type SortOrder
 } from '../constants';
-import { getGist } from '../request'
+import { getGist, updateGistFile } from '../request'
 import { useSettingsStore } from './settings-store';
 
 interface ClipboardState {
@@ -31,10 +31,11 @@ interface ClipboardState {
   currentHistoryIndex: number; // 当前历史版本索引
   
   // Actions
-  addItem: (content: string) => void;
-  deleteItem: (id: string) => void;
-  clearAll: () => void;
+  addItem: (content: string) => Promise<void>;
+  deleteItem: (id: string) => Promise<void>;
+  clearAll: () => Promise<void>;
   loadFromGist: () => Promise<void>;
+  syncToGist: () => Promise<void>;
   setLoading: (loading: boolean) => void;
   setError: (error: string) => void;
   clearError: () => void;
@@ -69,14 +70,44 @@ export const useClipboardStore = create<ClipboardState>()(
       maxHistorySize: APP_CONFIG.DEFAULT_MAX_HISTORY,
       currentHistoryIndex: -1,
       
+      // 通用同步函数
+      syncToGist: async () => {
+        const { gistId, githubToken } = useSettingsStore.getState();
+        if (gistId && githubToken) {
+          try {
+            set({ loading: true, error: '' });
+            
+            // 获取最新的项目列表
+            const { items } = get();
+            const gistContent = JSON.stringify({
+              items: items,
+              lastUpdated: new Date().toISOString()
+            }, null, 2);
+            
+            await updateGistFile(gistId, 'clipboard.json', gistContent, 'Updated clipboard data');
+            
+            // 更新最后同步时间
+            set({ lastSync: new Date().toISOString() });
+            
+          } catch (error: any) {
+            console.error('Gist sync failed:', error);
+            set({ error: `Gist 同步失败: ${error.message}` });
+            throw error; // 重新抛出错误，让调用者知道同步失败了
+          } finally {
+            set({ loading: false });
+          }
+        }
+      },
+
       // Actions
-      addItem: (content: string) => {
+      addItem: async (content: string) => {
         const newItem: ClipboardItem = {
           id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
           content: content.trim(),
           timestamp: new Date().toISOString(),
         };
         
+        // 先添加到本地状态
         set((state) => ({
           items: [newItem, ...state.items],
           error: ''
@@ -84,22 +115,31 @@ export const useClipboardStore = create<ClipboardState>()(
         
         // 自动保存到历史
         get().saveToHistory();
+        
+        // 自动同步到 Gist（如果配置了）
+        await get().syncToGist();
       },
       
-      deleteItem: (id: string) => {
+      deleteItem: async (id: string) => {
         set((state) => ({
           items: state.items.filter(item => item.id !== id)
         }));
         
         // 自动保存到历史
         get().saveToHistory();
+        
+        // 自动同步到 Gist（如果配置了）
+        await get().syncToGist();
       },
       
-      clearAll: () => {
+      clearAll: async () => {
         set({ items: [] });
         
         // 自动保存到历史
         get().saveToHistory();
+        
+        // 自动同步到 Gist（如果配置了）
+        await get().syncToGist();
       },
       
       loadFromGist: async () => {
